@@ -2,9 +2,9 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es5",
-    "module":"es2015",
+    "module": "es2015",
     "lib": ["es2015", "es2016", "es2017", "dom"],
-    "strict": true,
+    "strict": true, //严格类型检查
     "sourceMap": true,
     "declaration": true,
     "allowSyntheticDefaultImports": true,
