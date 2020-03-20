@@ -1,9 +1,10 @@
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 
-import { parseHearders } from './helpers/headers'
-import { createError } from './helpers/error'
+import { parseHearders } from '../helpers/headers'
+import { createError } from '../helpers/error'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
+  // 返回一个Promise对象
   return new Promise((resolve, reject) => {
     const { data = null, url, method = 'get', headers, responseType, timeout } = config // data默认是null method默认get
 
@@ -17,14 +18,27 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       request.timeout = timeout
     }
 
-    request.open(method.toUpperCase(), url, true) // 异步：true
+    request.open(method.toUpperCase(), url!, true) // 异步：true
 
     request.onreadystatechange = function handleLoad() {
+      // 请求状态为4说明是可以请求的
+      /*
+        存有 XMLHttpRequest 的状态。从 0 到 4 发生变化。
+        0: 请求未初始化
+        1: 服务器连接已建立
+        2: 请求已接收
+        3: 请求处理中
+        4: 请求已完成，且响应已就绪
+      */
       if (request.readyState !== 4) {
-        // 请求状态为4说明是可以请求的
         return
       }
 
+      /*
+        只读属性 XMLHttpRequest.status 返回了XMLHttpRequest 响应中的数字状态码。
+        status 的值是一个无符号短整型。在请求完成前，status的值为0。
+        值得注意的是，如果 XMLHttpRequest 出错，浏览器返回的 status 也为0。
+      */
       if (request.status === 0) {
         return
       }
