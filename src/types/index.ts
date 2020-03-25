@@ -22,6 +22,8 @@ export interface AxiosRequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType // ts自带的类型
   timeout?: number
+
+  [propName: string]: any
 }
 /*
 其中，url 为请求的地址，必选属性；而其余属性都是可选属性。
@@ -54,6 +56,8 @@ export interface AxiosError extends Error {
 
 // 定义Axios接口
 export interface Axios {
+  defaults: AxiosRequestConfig
+
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>
     response: AxiosInterceptorManager<AxiosResponse>
