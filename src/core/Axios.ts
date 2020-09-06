@@ -8,6 +8,7 @@ import {
 } from '../types'
 import dispatchRequest from './dispatchRequest'
 import IntercepterManager from './interceptorManager'
+import mergeConfig from './mergeConfig'
 
 interface Interceptors {
   request: IntercepterManager<AxiosRequestConfig>
@@ -50,6 +51,8 @@ export default class Axios {
         rejected: undefined
       }
     ]
+
+    config = mergeConfig(this.defaults, config)
 
     this.interceptors.request.forEach(interceptor => {
       chain.unshift(interceptor)

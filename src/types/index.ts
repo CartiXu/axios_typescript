@@ -45,7 +45,7 @@ export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {
   // 继承promise泛型接口
 }
 
-//ErrorType
+// ErrorType
 export interface AxiosError extends Error {
   isAxiosError: boolean
   config: AxiosRequestConfig

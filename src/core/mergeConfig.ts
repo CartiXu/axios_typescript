@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from '../types'
-import { isPlainObjet } from '../helpers/util'
+import { isPlainObjet, deepMerge } from '../helpers/util'
 
 /*
     合并方法的整体思路就是对 config1 和 config2 中的属性遍历，
@@ -19,16 +19,28 @@ function fromVal2Strat(val1: any, val2: any): any {
   }
 }
 
-// function deepMergeStrat(val1: any, val2: any): any  {
-//     if (isPlainObjet(val2)) {
-//         return deepMerge()
-//     }
-// }
+function deepMergeStrat(val1: any, val2: any): any {
+  if (isPlainObjet(val2)) {
+    return deepMerge()
+  } else if (typeof val2 !== 'undefined') {
+    return val2
+  } else if (isPlainObjet(val1)) {
+    return deepMerge()
+  } else if (typeof val1 !== 'undefined') {
+    return val1
+  }
+}
 
 const stratKeysFromVal2 = ['url', 'params', 'data']
 
 stratKeysFromVal2.forEach(key => {
   strats[key] = fromVal2Strat
+})
+
+const stratKeysDeepMerg = ['headers', '']
+
+stratKeysDeepMerg.forEach(key => {
+  strats[key] = deepMergeStrat
 })
 
 export default function mergeConfig(
