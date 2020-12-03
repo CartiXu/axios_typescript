@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from '../types'
-import { isPlainObjet, deepMerge } from '../helpers/util'
+import { isPlainObject, deepMerge } from '../helpers/util'
 
 /*
     合并方法的整体思路就是对 config1 和 config2 中的属性遍历，
@@ -8,7 +8,6 @@ import { isPlainObjet, deepMerge } from '../helpers/util'
 
 const strats = Object.create(null)
 
-// 默认合并策略
 function defaultStrat(val1: any, val2: any): any {
   return typeof val2 !== 'undefined' ? val2 : val1
 }
@@ -20,13 +19,13 @@ function fromVal2Strat(val1: any, val2: any): any {
 }
 
 function deepMergeStrat(val1: any, val2: any): any {
-  if (isPlainObjet(val2)) {
-    return deepMerge()
+  if (isPlainObject(val2)) {
+    return deepMerge(val1, val2)
   } else if (typeof val2 !== 'undefined') {
     return val2
-  } else if (isPlainObjet(val1)) {
-    return deepMerge()
-  } else if (typeof val1 !== 'undefined') {
+  } else if (isPlainObject(val1)) {
+    return deepMerge(val1)
+  } else {
     return val1
   }
 }
@@ -37,15 +36,15 @@ stratKeysFromVal2.forEach(key => {
   strats[key] = fromVal2Strat
 })
 
-const stratKeysDeepMerg = ['headers', '']
+const stratKeysDeepMerge = ['headers', 'auth']
 
-stratKeysDeepMerg.forEach(key => {
+stratKeysDeepMerge.forEach(key => {
   strats[key] = deepMergeStrat
 })
 
 export default function mergeConfig(
   config1: AxiosRequestConfig,
-  config2: AxiosRequestConfig
+  config2?: AxiosRequestConfig
 ): AxiosRequestConfig {
   if (!config2) {
     config2 = {}
@@ -53,7 +52,7 @@ export default function mergeConfig(
 
   const config = Object.create(null)
 
-  for (const key in config2) {
+  for (let key in config2) {
     mergeField(key)
   }
 
@@ -64,9 +63,7 @@ export default function mergeConfig(
   }
 
   function mergeField(key: string): void {
-    // 选择merge函数
     const strat = strats[key] || defaultStrat
-    // 将merge后的值传入config
     config[key] = strat(config1[key], config2![key])
   }
 

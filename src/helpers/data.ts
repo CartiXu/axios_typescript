@@ -1,7 +1,7 @@
-import { isPlainObjet } from './util'
+import { isPlainObject } from './util'
 
 export function transformRequest(data: any): any {
-  if (isPlainObjet(data)) {
+  if (isPlainObject(data)) {
     return JSON.stringify(data)
   }
   return data

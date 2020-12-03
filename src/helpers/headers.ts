@@ -1,4 +1,5 @@
-import { isPlainObjet } from './util'
+import { Method } from '../types'
+import { deepMerge, isPlainObject } from './util'
 
 function normalizeHearderName(headers: any, normalizedName: string): void {
   if (!headers) {
@@ -14,7 +15,7 @@ function normalizeHearderName(headers: any, normalizedName: string): void {
 
 export function processHearders(headers: any, data: any): any {
   normalizeHearderName(headers, 'Content-Type')
-  if (isPlainObjet(data)) {
+  if (isPlainObject(data)) {
     // 如果是普通对象则给它设为application/json
     if (headers && !headers['Content-Type']) {
       headers['Content-Type'] = 'application/json;charset=UTF-8'
@@ -43,4 +44,19 @@ export function parseHearders(headers: string): any {
   })
 
   return parsed
+}
+
+export function flattenHeaders(headers: any, method: Method): any {
+  if (!headers) {
+    return headers
+  }
+  headers = deepMerge(headers.common, headers[method], headers)
+
+  const methodsToDelete = ['delete', 'get', 'head', 'option', 'post', 'put', 'patch', 'common']
+
+  methodsToDelete.forEach(method => {
+    delete headers[method]
+  })
+
+  return headers
 }

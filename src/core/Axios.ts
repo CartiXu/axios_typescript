@@ -43,7 +43,7 @@ export default class Axios {
       // 此时url为config
       config = url
     }
-
+    config = mergeConfig(this.defaults, config)
     // 链式调用 定义一个Promise chain
     const chain: PromiseChain<any>[] = [
       {
@@ -51,8 +51,6 @@ export default class Axios {
         rejected: undefined
       }
     ]
-
-    config = mergeConfig(this.defaults, config)
 
     this.interceptors.request.forEach(interceptor => {
       chain.unshift(interceptor)

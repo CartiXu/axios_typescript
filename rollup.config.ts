@@ -7,7 +7,7 @@ import json from 'rollup-plugin-json'
 
 const pkg = require('./package.json')
 
-const libraryName = 'axios-typescript'
+const libraryName = 'index'
 
 export default {
   input: `src/${libraryName}.ts`,
@@ -15,7 +15,7 @@ export default {
     { file: pkg.main, name: camelCase(libraryName), format: 'umd', sourcemap: true },
     { file: pkg.module, format: 'es', sourcemap: true },
   ],
-  Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
+  // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
   external: [],
   watch: {
     include: 'src/**',
