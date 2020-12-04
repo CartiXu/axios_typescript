@@ -1,7 +1,8 @@
-import { AxiosInstance, AxiosRequestConfig } from './types'
+import { AxiosInstance, AxiosRequestConfig, AxiosStatic } from './types'
 import Axios from './core/Axios'
 import { extend } from './helpers/util'
 import defaults from './defaults'
+import mergeConfig from './core/mergeConfig'
 
 /*
     在 createInstance 工厂函数的内部，我们首先实例化了 Axios 实例 context，
@@ -19,15 +20,21 @@ import defaults from './defaults'
 
 */
 
-function createInstance(config: AxiosRequestConfig): AxiosInstance {
+function createInstance(config: AxiosRequestConfig): AxiosStatic {
   const context = new Axios(config)
+  // 创建instance 指向 Axios.prototype.request 方法
   const instance = Axios.prototype.request.bind(context)
 
   extend(instance, context)
 
-  return instance as AxiosInstance
+  return instance as AxiosStatic
 }
 
 const axios = createInstance(defaults)
+
+// axios.create 静态方法 合并config 返回一个新的axios实例
+axios.create = function create(config) {
+  return createInstance(mergeConfig(defaults, config))
+}
 
 export default axios

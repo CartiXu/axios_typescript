@@ -17,7 +17,6 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     if (timeout) {
       request.timeout = timeout
     }
-
     request.open(method.toUpperCase(), url!, true) // 异步：true
 
     request.onreadystatechange = function handleLoad() {
@@ -45,6 +44,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
 
       const responseHeaders = parseHearders(request.getAllResponseHeaders())
       const responseData = responseType !== 'text' ? request.response : request.responseText
+
       const response: AxiosResponse = {
         data: responseData,
         status: request.status,
@@ -71,8 +71,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
         request.setRequestHeader(name, headers[name])
       }
     })
-    request.send(data)
 
+    request.send(data)
     function handleResponse(response: AxiosResponse): void {
       if (response.status >= 200 && response.status < 300) {
         resolve(response)
