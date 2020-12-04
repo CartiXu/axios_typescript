@@ -5,14 +5,12 @@ import { flattenHeaders } from '../helpers/headers'
 import transform from '../core/transform'
 
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
+  // 判断是否取消
+  throwIfCancellationRequested(config)
   // 处理config属性
   processConfig(config)
   // 返回Promise对象 并给出返回对象res
-  console.log(config)
-
   return xhr(config).then(res => {
-    console.log(res)
-
     return transformResponseData(res)
   })
 }
@@ -32,4 +30,10 @@ function transformURL(config: AxiosRequestConfig): string {
 function transformResponseData(res: AxiosResponse): AxiosResponse {
   res.data = transform(res.data, res.headers, res.config.tansformResponse)
   return res
+}
+
+function throwIfCancellationRequested(config: AxiosRequestConfig): void {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested()
+  }
 }
