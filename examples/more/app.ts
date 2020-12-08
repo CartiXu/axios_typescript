@@ -1,30 +1,30 @@
 import axios, { AxiosError } from '../../src/index'
 import qs from 'qs'
 
-import 'nprogress/nprogress.css'
+// import 'nprogress/nprogress.css'
 
-import NProgress from 'nprogress'
+// import NProgress from 'nprogress'
 
-document.cookie = 'a=b'
+// document.cookie = 'a=b'
 
-axios.get('/more/get').then(res => {
+// axios.get('/more/get').then(res => {
+//   console.log(res)
+// }).catch(e=>{})
+
+// axios.post('http://127.0.0.1:8088/more/server2', {}, {
+//   withCredentials: true
+// }).then(res => {
+//   console.log(res)
+// }).catch(e=>{})
+
+const instance = axios.create({
+  xsrfCookieName: 'XSRF-TOKEN-D',
+  xsrfHeaderName: 'X-XSRF-TOKEN-D'
+})
+
+instance.get('/more/get').then(res => {
   console.log(res)
-}).catch(e=>{})
-
-axios.post('http://127.0.0.1:8088/more/server2', {}, {
-  withCredentials: true
-}).then(res => {
-  console.log(res)
-}).catch(e=>{})
-
-// // const instance = axios.create({
-// //   xsrfCookieName: 'XSRF-TOKEN-D',
-// //   xsrfHeaderName: 'X-XSRF-TOKEN-D'
-// // })
-// //
-// // instance.get('/more/get').then(res => {
-// //   console.log(res)
-// // })
+})
 // const instance = axios.create()
 //
 // function calculatePercentage(loaded: number, total: number) {
